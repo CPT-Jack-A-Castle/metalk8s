@@ -47,7 +47,7 @@ repos:
         files: salt/tests/unit/formulas/.*\.py
         additional_dependencies:
           - 'pyenchant~=2.0'
-          - 'salt==3002.5'
+          - 'salt==3003.1'
           - pytest
           - Jinja2
 
