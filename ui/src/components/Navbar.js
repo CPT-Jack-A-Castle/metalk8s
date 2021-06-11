@@ -1,5 +1,11 @@
 //@flow
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useContext,
+} from 'react';
 import { useTypedSelector } from '../hooks';
 import {
   setThemeAction,
@@ -9,6 +15,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorPage500 } from '@scality/core-ui';
+import { AuthContext } from '../containers/AuthProvider';
 
 function useWebComponent(src?: string, customElementName: string) {
   const [hasFailed, setHasFailed] = useState(false);
@@ -76,6 +83,11 @@ function useLoginEffect(
 ) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const dispatch = useDispatch();
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error('Auth context is not defined');
+  }
+  const { setAuthcontext } = authContext;
 
   useEffect(() => {
     if (!navbarRef.current || !version) {
@@ -86,6 +98,8 @@ function useLoginEffect(
 
     const onAuthenticated = (evt: Event) => {
       if (window.shellUINavbar[version].isAuthenticatedEvent(evt)) {
+        // $flow-disable-line
+        setAuthcontext(evt.detail);
         // $flow-disable-line
         dispatch(updateAPIConfigAction(evt.detail));
         setIsAuthenticated(true);
@@ -105,7 +119,7 @@ function useLoginEffect(
         onAuthenticated,
       );
     };
-  }, [navbarRef, version, dispatch]);
+  }, [navbarRef, version, dispatch, setAuthcontext]);
 
   return { isAuthenticated };
 }
