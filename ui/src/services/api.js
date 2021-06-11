@@ -49,6 +49,7 @@ export type Config = {
   url_alerts: string,
   alerts_lib_version: string,
   url_support?: string,
+  platformLibrary: { url: string, version: string },
 };
 
 export function fetchConfig(): Promise<Config> {
