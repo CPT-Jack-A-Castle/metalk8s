@@ -7,6 +7,9 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import locale_en from 'react-intl/locale-data/en';
 import locale_fr from 'react-intl/locale-data/fr';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ConfigProvider } from './ConfigProvider';
+import { PlatformLibraryProvider } from './PlatformLibraryProvider';
+import { AuthProvider } from './AuthProvider';
 import translations_en from '../translations/en';
 import translations_fr from '../translations/fr';
 import { Loader } from '@scality/core-ui';
@@ -42,16 +45,22 @@ const App = () => {
 
   return status === 'success' && api && theme ? (
     <QueryClientProvider client={queryClient}>
-      <IntlProvider
-        locale={language}
-        messages={messages[language.toUpperCase()]}
-      >
-        <IntlGlobalProvider>
-          <MetricsTimeSpanProvider>
-            <Layout />
-          </MetricsTimeSpanProvider>
-        </IntlGlobalProvider>
-      </IntlProvider>
+      <AuthProvider>
+        <ConfigProvider>
+          <PlatformLibraryProvider>
+            <IntlProvider
+              locale={language}
+              messages={messages[language.toUpperCase()]}
+            >
+              <IntlGlobalProvider>
+                <MetricsTimeSpanProvider>
+                  <Layout />
+                </MetricsTimeSpanProvider>
+              </IntlGlobalProvider>
+            </IntlProvider>
+          </PlatformLibraryProvider>
+        </ConfigProvider>
+      </AuthProvider>
     </QueryClientProvider>
   ) : (
     <Loader size="massive" centered={true} />
