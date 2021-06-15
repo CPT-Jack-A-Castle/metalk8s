@@ -28,7 +28,6 @@ export const AuthContext: Context<{
 
 export function useAuth(): Auth | null {
   const auth = useContext(AuthContext);
-  console.log(auth);
   if (!auth) {
     throw new Error(
       'auth is undefined, this may be because you forgot to wrap your component with <AuthProvider></AuthProvider>',
