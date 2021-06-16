@@ -86,45 +86,61 @@ const DashboardInventory = () => {
 
   return (
     <InventoryContainer>
-      <PageSubtitle>{intl.translate('inventory')}</PageSubtitle>
+      <PageSubtitle aria-label="inventory">
+        {intl.translate('inventory')}
+      </PageSubtitle>
       <CardsWrapper>
         {(nodesCount || nodesCount === 0) && nodesStatus ? (
           <Card
             width="46%"
             headerBackgroundColor="backgroundLevel1"
             bodyBackgroundColor="backgroundLevel2"
+            aria-label="nodes"
           >
             <Card.Header>
               <div>Nodes</div>
             </Card.Header>
             <Card.BodyContainer>
               <Card.Body>
-                <InventoryIcon className="fas fa-server" status={nodesStatus} />
-                <InventoryValue>{nodesCount}</InventoryValue>
+                <InventoryIcon
+                  className="fas fa-server"
+                  status={nodesStatus}
+                  aria-label={nodesStatus}
+                />
+                <InventoryValue aria-label={`${nodesCount} nodes`}>
+                  {nodesCount}
+                </InventoryValue>
               </Card.Body>
             </Card.BodyContainer>
           </Card>
         ) : (
-          <Loader />
+          <Loader aria-label="loading" />
         )}
         {(volumesCount || volumesCount === 0) && volumesStatus ? (
           <Card
             width="46%"
             headerBackgroundColor="backgroundLevel1"
             bodyBackgroundColor="backgroundLevel2"
+            aria-label="volumes"
           >
             <Card.Header>
               <div>Volumes</div>
             </Card.Header>
             <Card.BodyContainer>
               <Card.Body>
-                <InventoryIcon className="fas fa-hdd" status={volumesStatus} />
-                <InventoryValue>{volumesCount}</InventoryValue>
+                <InventoryIcon
+                  className="fas fa-hdd"
+                  status={volumesStatus}
+                  aria-label={volumesStatus}
+                />
+                <InventoryValue aria-label={`${volumesCount} volumes`}>
+                  {volumesCount}
+                </InventoryValue>
               </Card.Body>
             </Card.BodyContainer>
           </Card>
         ) : (
-          <Loader />
+          <Loader aria-label="loading" />
         )}
       </CardsWrapper>
     </InventoryContainer>

@@ -37,7 +37,7 @@ export function ConfigProvider({ children }: { children: Node }): Node {
   switch (status) {
     case 'idle':
     case 'loading':
-      return <Loader />;
+      return <Loader aria-label="loading" />;
     case 'success':
       return (
         <ConfigContext.Provider
