@@ -11,6 +11,7 @@ import {
 } from './__TEST__/util';
 import type { Alert } from '../services/alertUtils';
 import { useHighestSeverityAlerts } from '../containers/AlertProvider';
+import { usePlatformLibrary } from '../containers/PlatformLibraryProvider';
 
 const alertsCritical = [
   {
@@ -27,7 +28,7 @@ const alertsWarning = [
 const noAlerts = [];
 
 jest.mock('../containers/ConfigProvider', () => ({
-  __esModule: true, // this property makes it work
+  __esModule: true, // Allows for the "default" import to work in the Mock injection
   default: ({ children }) => <>{children}</>,
   useConfig: () => ({
     url: 'mock.k8s.url',
@@ -35,7 +36,7 @@ jest.mock('../containers/ConfigProvider', () => ({
 }));
 
 jest.mock('../containers/AuthProvider', () => ({
-  __esModule: true, // this property makes it work
+  __esModule: true,
   default: ({ children }) => <>{children}</>,
   useAuth: () => ({
     id_token: 'mock.token',
@@ -43,18 +44,9 @@ jest.mock('../containers/AuthProvider', () => ({
 }));
 
 jest.mock('../containers/PlatformLibraryProvider', () => ({
-  __esModule: true, // this property makes it work
+  __esModule: true,
   default: ({ children }) => <>{children}</>,
-  usePlatformLibrary: () => ({
-    getVolumesCountQuery: () => ({
-      queryKey: 'countVolumes',
-      queryFn: () => 4,
-    }),
-    getNodesCountQuery: () => ({
-      queryKey: 'countNodes',
-      queryFn: () => 6,
-    }),
-  }),
+  usePlatformLibrary: jest.fn(),
 }));
 
 jest.mock('../containers/AlertProvider', () => ({
@@ -106,9 +98,19 @@ const server = setupServer(
 describe('the dashboard inventory panel', () => {
   beforeAll(() => {
     server.listen();
+    (usePlatformLibrary: any).mockImplementation(() => ({
+      getVolumesCountQuery: () => ({
+        queryKey: 'countVolumes',
+        queryFn: () => 4,
+      }),
+      getNodesCountQuery: () => ({
+        queryKey: 'countNodes',
+        queryFn: () => 6,
+      }),
+    }));
   });
 
-  test('displays the inventory', async () => {
+  test('displays the inventory card and nodes/volumes counts', async () => {
     // Render
     render(<DashboardInventory />);
 
@@ -119,21 +121,11 @@ describe('the dashboard inventory panel', () => {
     expect(screen.getByLabelText('inventory')).toBeInTheDocument();
     expect(screen.getByLabelText('nodes')).toBeInTheDocument();
     expect(screen.getByLabelText('volumes')).toBeInTheDocument();
-  });
-
-  test('displays the nodes and volumes counts', async () => {
-    // Render
-    render(<DashboardInventory />);
-
-    // Loading
-    await waitForLoadingToFinish();
-
-    // Verify
     expect(screen.getByLabelText('6 nodes')).toBeInTheDocument();
     expect(screen.getByLabelText('4 volumes')).toBeInTheDocument();
   });
 
-  test('displays the properly the nodes and volumes status CRITICAL', async () => {
+  test('displays properly the status CRITICAL for nodes and volumes', async () => {
     // Have to any type jest.fn function to avoid Flow warning for mockImplementation()
     (useHighestSeverityAlerts: any).mockImplementation(() => alertsCritical);
 
@@ -147,7 +139,7 @@ describe('the dashboard inventory panel', () => {
     expect(screen.getAllByLabelText('critical').length).toEqual(2);
   });
 
-  test('displays the properly the nodes and volumes status WARNING', async () => {
+  test('displays properly the status WARNING for nodes and volumes', async () => {
     // Have to any type jest.fn function to avoid Flow warning for mockImplementation()
     (useHighestSeverityAlerts: any).mockImplementation(() => alertsWarning);
 
@@ -161,7 +153,7 @@ describe('the dashboard inventory panel', () => {
     expect(screen.getAllByLabelText('warning').length).toEqual(2);
   });
 
-  test('displays the HEALTHY status when no alerts are present', async () => {
+  test('displays properly the status HEALTHY for nodes and volumes', async () => {
     // Have to any type jest.fn function to avoid Flow warning for mockImplementation()
     (useHighestSeverityAlerts: any).mockImplementation(() => noAlerts);
 
@@ -173,6 +165,26 @@ describe('the dashboard inventory panel', () => {
 
     // Verify
     expect(screen.getAllByLabelText('healthy').length).toEqual(2);
+  });
+
+  test('displays the loader if the query does not return a result', async () => {
+    // Have to any type jest.fn function to avoid Flow warning for mockImplementation()
+    (usePlatformLibrary: any).mockImplementation(() => ({
+      getVolumesCountQuery: () => ({
+        queryKey: 'countVolumes',
+        queryFn: () => new Error('mock'),
+      }),
+      getNodesCountQuery: () => ({
+        queryKey: 'countNodes',
+        queryFn: () => new Error('mock'),
+      }),
+    }));
+
+    // Render
+    render(<DashboardInventory />);
+
+    // Verify
+    expect(screen.getAllByLabelText('loading').length).toEqual(2);
   });
 
   afterEach(() => server.resetHandlers());
