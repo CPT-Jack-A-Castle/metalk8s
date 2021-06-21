@@ -15,6 +15,8 @@ import { ErrorPage500 } from '@scality/core-ui';
 import { useConfig } from './ConfigProvider';
 import { STATUS_HEALTH } from '../constants';
 
+export type Status = 'healthy' | 'warning' | 'critical';
+
 export const useAlerts = (filters: FilterLabels) => {
   const { alerts_lib_version } = useConfig();
 
