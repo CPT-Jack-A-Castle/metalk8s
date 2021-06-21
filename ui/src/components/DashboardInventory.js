@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import styled, { css } from 'styled-components';
 import { Card, Loader } from '@scality/core-ui';
 import {
-  padding,
+  spacing,
   fontSize,
   fontWeight,
 } from '@scality/core-ui/dist/style/theme';
@@ -23,7 +23,7 @@ import { PageSubtitle } from '../components/style/CommonLayoutStyle';
 import { STATUS_WARNING, STATUS_CRITICAL } from '../constants';
 
 const InventoryContainer = styled.div`
-  padding: 0px ${padding.small};
+  padding: 0px ${spacing.sp2};
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -33,12 +33,12 @@ const CardsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   font-size: ${fontSize.base};
-  margin: ${padding.base} 0px;
+  margin: ${spacing.sp4} 0px;
 `;
 
 const InventoryIcon = styled.i`
   font-size: ${fontSize.larger};
-  margin-right: ${padding.base};
+  margin-right: ${spacing.sp4};
   ${(props) => {
     switch (props.status) {
       case STATUS_WARNING:
