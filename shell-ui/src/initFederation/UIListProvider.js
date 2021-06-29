@@ -76,7 +76,7 @@ export const UIListProvider = ({
       {(status === 'loading' || status === 'idle') && (
         <Loader size="massive" centered={true} aria-label="loading" />
       )}
-      {status === 'error' && <ErrorPage500 data-cy="sc-error-page500" />}
+      {status === 'error' && <> UIList Provider error <ErrorPage500 data-cy="sc-error-page500" /></>}
       {status === 'success' && children}
     </UIListContext.Provider>
   );

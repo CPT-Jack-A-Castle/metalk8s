@@ -84,7 +84,7 @@ export const ShellConfigProvider = ({ shellConfigUrl, children }): Node => {
       {(status === 'idle' || status === 'loading') && (
         <Loader size="massive" centered={true} aria-label="loading" />
       )}
-      {status === 'error' && <ErrorPage500 data-cy="sc-error-page500" />}
+      {status === 'error' && <>Shell config provider error <ErrorPage500 data-cy="sc-error-page500" /></>}
       {status === 'success' && children}
     </ShellConfigContext.Provider>
   );

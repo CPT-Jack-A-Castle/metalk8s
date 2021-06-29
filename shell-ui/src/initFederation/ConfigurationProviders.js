@@ -308,7 +308,7 @@ export const ConfigurationProvider = ({
       {(globalStatus === 'loading' || globalStatus === 'idle') && (
         <Loader size="massive" centered={true} aria-label="loading" />
       )}
-      {globalStatus === 'error' && <ErrorPage500 data-cy="sc-error-page500" />}
+      {globalStatus === 'error' && <>Configs providers error <ErrorPage500 data-cy="sc-error-page500" /></>}
       {globalStatus === 'success' && children}
     </WebFingersContext.Provider>
   );
