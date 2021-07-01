@@ -76,7 +76,7 @@ Create metalk8s-ui ConfigMap:
                   "name": "metalk8s.eu-west-1"
               },
               "spec": {
-                "title": {{ metalk8s_ui_config.spec.title }},
+                "title": "{{ metalk8s_ui_config.spec.title }}",
                 "selfConfiguration": {
                   "url": "/api/kubernetes",
                   "url_salt": "/api/salt",
