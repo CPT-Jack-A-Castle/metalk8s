@@ -168,8 +168,11 @@ Convert old Metalk8s Shell UI ServiceConfiguration to new format:
               navbar:
                 main:
                   {%- if 'options' in config_data.spec %}
-                    {%- set main_options = [{'url': url, 'groups': entry['groups'], 'label': {'en': entry['en'], 'fr': entry['fr']}, 'order': entry['order']} for url, entry in config_data.spec.options.main.items()] %}
-                    {%- set sorted_main_options = sorted(main_options, key=lambda k: k['order']) %}
+                    {% set main_options = [] %}
+                    {% for url, entry in config_data.spec.options.main.items() %}
+                      {% do main_options.append({'url': url, 'groups': entry['groups'], 'label': {'en': entry['en'], 'fr': entry['fr']}, 'order': entry['order']}) %}
+                    {% endfor %}
+                    {%- set sorted_main_options =main_options | sort(attribute='order') %}
                     {% for entry in sorted_main_options %}
                       {%- if entry['url'] == metalk8s_ui_url %}
                   - kind: metalk8s-ui
