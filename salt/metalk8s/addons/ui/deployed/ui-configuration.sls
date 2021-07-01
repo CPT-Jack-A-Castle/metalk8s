@@ -25,7 +25,7 @@ include:
   )
 %}
 
-{%- if metalk8s_ui_config is none %}
+{%- if deployed_ui_apps is none %}
 
 Create deployed-ui-apps ConfigMap:
   metalk8s_kubernetes.object_present:

@@ -106,11 +106,11 @@ Create shell-ui ConfigMap:
 Create deployed-ui-apps ConfigMap:
   metalk8s_kubernetes.object_present:
     - manifest:
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: deployed-ui-apps-generated
-        namespace: metalk8s-ui
-      data:
-        deployed-ui-apps.json: |-
-          {{ deployed_ui_apps.spec.deployedApps | tojson }}
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: deployed-ui-apps-generated
+          namespace: metalk8s-ui
+        data:
+          deployed-ui-apps.json: |-
+            {{ deployed_ui_apps.spec.deployedApps | tojson }}
