@@ -10,7 +10,7 @@ module.exports = {
   entry: './src/App.jsx',
   output: {
     path: path.resolve(__dirname, 'build'),
-    publicPath: '/shell',
+    publicPath: '/shell/',
   },
   plugins: [
     ...common.plugins(),
